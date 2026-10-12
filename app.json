@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "tcc",
-    "slug": "tcc",
+    "slug": "alerta",
     "scheme": "tcc",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -23,6 +23,13 @@
     },
     "plugins": [
       "expo-router"
-    ]
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "d646f9fc-2112-45ab-a5cd-c94715447aa4"
+      }
+    },
+    "owner": "alerta.repo"
   }
 }

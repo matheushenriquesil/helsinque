@@ -10,3 +10,5 @@ export default function SalvarContatos(
     `Contato 1: ${nome1}\nContato 2: ${nome2}\nContato 3: ${nome3}`
   );
 }
+
+

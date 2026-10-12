@@ -1,4 +1,14 @@
-import { View, Text, TextInput, Button } from "react-native";
+
+import React from "react";
+import {
+  View,
+  Text,
+  TextInput,
+  Pressable,
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform,
+} from "react-native";
 import { router } from "expo-router";
 import { style } from "./style";
 import { fazerLogin } from "./function";
@@ -9,41 +19,85 @@ export default function Index() {
   };
 
   return (
-    <View style={style.container}>
+    <KeyboardAvoidingView
+      style={style.container}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+    >
+      <ScrollView
+        contentContainerStyle={style.scrollContent}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={style.conteudo}>
+          <View style={style.logoContainer}>
+            <View style={style.logoCirculo}>
+              <Text style={style.logoCruz}>+</Text>
+            </View>
+          </View>
 
-      <View>
-        <Text style={style.textos}>
-          Seja Bem Vindo Ao Alerta +
-        </Text>
-      </View>
+          <Text style={style.titulo}>
+            Alerta <Text style={style.tituloDestaque}>+</Text>
+          </Text>
 
-      <View style={style.containertext}>
-        <TextInput
-          style={style.textosInput}
-          placeholder="batatatas@gmail.com"
-        />
-      </View>
+          <Text style={style.subtitulo}>
+            Sua segurança em primeiro lugar.
+          </Text>
 
-      <View>
-        <TextInput
-          style={style.textosInput}
-          placeholder="insira uma senha valida"
-          secureTextEntry
-        />
-      </View>
+  
+          <View style={style.formulario}>
+            <Text style={style.label}>E-mail</Text>
 
-      <View>
-        <Button title="Entrar" color="#d62828" onPress={handleLogin} />
-      </View>
+            <TextInput
+              style={style.textosInput}
+              placeholder="Digite seu e-mail"
+              placeholderTextColor="#88888f"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              autoCorrect={false}
+            />
 
-      <View>
-        <Text>nao tem conta?</Text>
+            <Text style={style.label}>Senha</Text>
 
-        <Button
-          title="Crie uma"
-        />
-      </View>
+            <TextInput
+              style={style.textosInput}
+              placeholder="Digite sua senha"
+              placeholderTextColor="#88888f"
+              secureTextEntry
+              autoCapitalize="none"
+            />
 
-    </View>
+          
+            <Pressable
+              style={style.botaoEntrar}
+              onPress={handleLogin}
+            >
+              <Text style={style.textoBotaoEntrar}>
+                Entrar
+              </Text>
+            </Pressable>
+
+            
+            <View style={style.areaCadastro}>
+              <Text style={style.naotemconta}>
+                Ainda não tem uma conta?
+              </Text>
+
+              <Pressable
+                style={style.botaoCadastro}
+                onPress={() => router.push("/Cadastro")}
+              >
+                <Text style={style.textoBotaoCadastro}>
+                  Criar minha conta
+                </Text>
+              </Pressable>
+            </View>
+          </View>
+
+          <Text style={style.rodape}>
+            ALERTA + • PROTEÇÃO E SEGURANÇA
+          </Text>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }

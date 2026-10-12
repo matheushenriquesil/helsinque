@@ -1,89 +1,318 @@
+
 import React from "react";
+
 import {
   View,
   Text,
   TextInput,
   Pressable,
   ScrollView,
-  Alert,
+  Modal,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
+
 import { estilos } from "./stylo";
+
 import { useScript } from "./script";
+
 import { useContatos } from "../../context/ContatosContext";
 
+
 export default function Main() {
-  const { numero, setNumero, mandarWhatsApp } = useScript();
+
+  // CONTATOS SALVOS NO CONTEXT
+
   const { contatos } = useContatos();
 
-  const handleProgramar = (nome: string) => {
-    Alert.alert(
-      "Programar Mensagem",
-      `Agendamento de mensagem para ${nome} em desenvolvimento.`
-    );
-  };
 
-  const handleEnviar = (nome: string, telefone: string) => {
-    Alert.alert(
-      "Enviar Mensagem",
-      `Envio direto de mensagem para ${nome} (${telefone}) em desenvolvimento.`
-    );
-  };
+  // FUNÇÕES DO SCRIPT
+
+  const {
+
+    mensagens,
+
+    contatoSelecionado,
+
+    textoMensagem,
+
+    setTextoMensagem,
+
+    modalVisivel,
+
+    setModalVisivel,
+
+    salvando,
+
+    ligarEmergencia,
+
+    handleEnviar,
+
+    handleProgramar,
+
+    handleSalvarMensagem,
+
+    handleEditarContatos,
+
+  } = useScript();
+
+
+  // INTERFACE PRINCIPAL
 
   return (
+
     <View style={estilos.container}>
+
       <ScrollView
         contentContainerStyle={estilos.scrollContent}
         showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
       >
-        <Text style={estilos.titulo}>Alerta +</Text>
+
+        {/* TÍTULO PRINCIPAL */}
+
+        <Text style={estilos.titulo}>
+          Alerta +
+        </Text>
+
         <Text style={estilos.subtitulo}>
           Painel de Emergência e Disparo Rápido
         </Text>
 
-        {/* Seção do Botão SOS */}
-        <View style={estilos.secaoSOS}>
-          <TextInput
-            style={estilos.entrada}
-            placeholder="Digite o número de telefone para SOS"
-            placeholderTextColor="#8a8a8a"
-            value={numero}
-            onChangeText={setNumero}
-            keyboardType="phone-pad"
-          />
 
-          <Pressable style={estilos.botao} onPress={mandarWhatsApp}>
-            <Text style={estilos.textobotao}>DISPARAR SOS</Text>
+        {/* SERVIÇOS DE EMERGÊNCIA */}
+
+        <View style={estilos.secaoSOS}>
+
+          <Text style={estilos.secaoTitulo}>
+            Serviços de Emergência
+          </Text>
+
+
+          {/* POLÍCIA */}
+
+          <Pressable
+            style={estilos.botao}
+            onPress={() => ligarEmergencia("190")}
+            accessibilityRole="button"
+            accessibilityLabel="Abrir discador para Polícia 190"
+          >
+
+            <Text style={estilos.textobotao}>
+              🚓 POLÍCIA - 190
+            </Text>
+
           </Pressable>
+
+
+          {/* SAMU */}
+
+          <Pressable
+            style={estilos.botao}
+            onPress={() => ligarEmergencia("192")}
+            accessibilityRole="button"
+            accessibilityLabel="Abrir discador para SAMU 192"
+          >
+
+            <Text style={estilos.textobotao}>
+              🚑 SAMU - 192
+            </Text>
+
+          </Pressable>
+
+
+          {/* BOMBEIROS */}
+
+          <Pressable
+            style={estilos.botao}
+            onPress={() => ligarEmergencia("193")}
+            accessibilityRole="button"
+            accessibilityLabel="Abrir discador para Bombeiros 193"
+          >
+
+            <Text style={estilos.textobotao}>
+              🚒 BOMBEIROS - 193
+            </Text>
+
+          </Pressable>
+
         </View>
 
-        {/* Seção de Contatos Cadastrados */}
-        <Text style={estilos.secaoTitulo}>Contatos de Emergência</Text>
+
+        {/* CABEÇALHO DOS CONTATOS */}
+
+        <View style={estilos.cabecalhoContatos}>
+
+          <Text style={estilos.secaoTitulo}>
+            Contatos de Emergência
+          </Text>
+
+          <Pressable
+            style={estilos.botaoEditar}
+            onPress={handleEditarContatos}
+          >
+
+            <Text style={estilos.textoBotaoEditar}>
+              ✏️ Editar contatos
+            </Text>
+
+          </Pressable>
+
+        </View>
+
+
+        {/* LISTA DE CONTATOS */}
 
         {contatos.map((contato) => (
-          <View key={contato.id} style={estilos.cardContato}>
+
+          <View
+            key={contato.id}
+            style={estilos.cardContato}
+          >
+
+            {/* INFORMAÇÕES DO CONTATO */}
+
             <View style={estilos.contatoInfo}>
-              <Text style={estilos.contatoNome}>{contato.nome}</Text>
-              <Text style={estilos.contatoNumero}>{contato.numero}</Text>
+
+              <Text style={estilos.contatoNome}>
+                {contato.nome}
+              </Text>
+
+              <Text style={estilos.contatoNumero}>
+                {contato.numero}
+              </Text>
+
+              <Text style={estilos.textoStatusMensagem}>
+
+                {mensagens[contato.id]
+                  ? "Mensagem personalizada salva"
+                  : "Nenhuma mensagem personalizada"}
+
+              </Text>
+
             </View>
 
+
+            {/* BOTÕES DO CONTATO */}
+
             <View style={estilos.contatoAcoes}>
+
               <Pressable
                 style={estilos.botaoAcaoSecundaria}
-                onPress={() => handleProgramar(contato.nome)}
+                onPress={() => handleProgramar(contato)}
               >
-                <Text style={estilos.textoAcaoSecundaria}>Programar msg</Text>
+
+                <Text style={estilos.textoAcaoSecundaria}>
+                  Programar msg
+                </Text>
+
               </Pressable>
+
 
               <Pressable
                 style={estilos.botaoAcaoPrimaria}
-                onPress={() => handleEnviar(contato.nome, contato.numero)}
+                onPress={() => handleEnviar(contato)}
               >
-                <Text style={estilos.textoAcaoPrimaria}>Enviar</Text>
+
+                <Text style={estilos.textoAcaoPrimaria}>
+                  Enviar
+                </Text>
+
               </Pressable>
+
             </View>
+
           </View>
+
         ))}
+
       </ScrollView>
+
+
+      {/* MODAL DE MENSAGEM PERSONALIZADA */}
+
+      <Modal
+        visible={modalVisivel}
+        transparent
+        animationType="slide"
+        onRequestClose={() => {
+          if (!salvando) setModalVisivel(false);
+        }}
+      >
+
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : undefined}
+          style={estilos.fundoModal}
+        >
+
+          <View style={estilos.caixaModal}>
+
+            <Text style={estilos.tituloModal}>
+              Editar mensagem
+            </Text>
+
+            <Text style={estilos.destinatarioModal}>
+              Destinatário: {contatoSelecionado?.nome}
+            </Text>
+
+
+            {/* CAMPO DA MENSAGEM */}
+
+            <TextInput
+              value={textoMensagem}
+              onChangeText={setTextoMensagem}
+              placeholder="Escreva sua mensagem..."
+              placeholderTextColor="#8a8a8a"
+              multiline
+              textAlignVertical="top"
+              style={estilos.campoMensagem}
+            />
+
+
+            {/* SALVAR MENSAGEM */}
+
+            <Pressable
+              onPress={handleSalvarMensagem}
+              disabled={salvando}
+              style={[
+                estilos.botaoSalvarMensagem,
+                salvando && estilos.botaoSalvarDesabilitado,
+              ]}
+            >
+
+              <Text style={estilos.textoBotaoSalvar}>
+
+                {salvando
+                  ? "Salvando..."
+                  : "Salvar mensagem"}
+
+              </Text>
+
+            </Pressable>
+
+
+            {/* CANCELAR */}
+
+            <Pressable
+              disabled={salvando}
+              onPress={() => setModalVisivel(false)}
+              style={estilos.botaoCancelar}
+            >
+
+              <Text style={estilos.textoCancelar}>
+                Cancelar
+              </Text>
+
+            </Pressable>
+
+          </View>
+
+        </KeyboardAvoidingView>
+
+      </Modal>
+
     </View>
+
   );
+
 }

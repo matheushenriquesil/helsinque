@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
+  Alert,
   View,
   Text,
   TextInput,
@@ -11,38 +12,58 @@ import { useContatos } from "../../context/ContatosContext";
 import { style } from "./style";
 
 export default function Contatos() {
-  const { salvarContatos } = useContatos();
+  const {
+    contatos,
+    salvarContatos,
+    carregandoContatos,
+  } = useContatos();
 
   const [nome1, setNome1] = useState("");
   const [num1, setNum1] = useState("");
-
   const [nome2, setNome2] = useState("");
   const [num2, setNum2] = useState("");
-
   const [nome3, setNome3] = useState("");
   const [num3, setNum3] = useState("");
 
-  const handleSalvar = () => {
+  useEffect(() => {
+    if (carregandoContatos) return;
+
+    setNome1(contatos[0]?.nome ?? "");
+    setNum1(contatos[0]?.numero ?? "");
+    setNome2(contatos[1]?.nome ?? "");
+    setNum2(contatos[1]?.numero ?? "");
+    setNome3(contatos[2]?.nome ?? "");
+    setNum3(contatos[2]?.numero ?? "");
+  }, [carregandoContatos, contatos]);
+
+  const handleSalvar = async () => {
     const lista = [
       {
-        id: "1",
+        id: contatos[0]?.id ?? "1",
         nome: nome1.trim() || "Contato 1",
-        numero: num1.trim() || "(11) 99999-0001",
+        numero: num1.trim(),
       },
       {
-        id: "2",
+        id: contatos[1]?.id ?? "2",
         nome: nome2.trim() || "Contato 2",
-        numero: num2.trim() || "(11) 99999-0002",
+        numero: num2.trim(),
       },
       {
-        id: "3",
+        id: contatos[2]?.id ?? "3",
         nome: nome3.trim() || "Contato 3",
-        numero: num3.trim() || "(11) 99999-0003",
+        numero: num3.trim(),
       },
     ];
 
-    salvarContatos(lista);
-    router.push("/main");
+    try {
+      await salvarContatos(lista);
+      router.replace("/main");
+    } catch {
+      Alert.alert(
+        "Erro",
+        "Não foi possível salvar os contatos."
+      );
+    }
   };
 
   return (
