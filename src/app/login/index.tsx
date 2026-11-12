@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -9,13 +9,17 @@ import {
   ScrollView,
   Platform,
 } from "react-native";
+
 import { router } from "expo-router";
 import { style } from "./style";
 import { fazerLogin } from "./function";
 
 export default function Index() {
-  const handleLogin = () => {
-    fazerLogin();
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+
+  const handleLogin = async () => {
+    await fazerLogin(email, senha);
   };
 
   return (
@@ -43,7 +47,6 @@ export default function Index() {
             Sua segurança em primeiro lugar.
           </Text>
 
-  
           <View style={style.formulario}>
             <Text style={style.label}>E-mail</Text>
 
@@ -54,6 +57,8 @@ export default function Index() {
               keyboardType="email-address"
               autoCapitalize="none"
               autoCorrect={false}
+              value={email}
+              onChangeText={setEmail}
             />
 
             <Text style={style.label}>Senha</Text>
@@ -64,9 +69,10 @@ export default function Index() {
               placeholderTextColor="#88888f"
               secureTextEntry
               autoCapitalize="none"
+              value={senha}
+              onChangeText={setSenha}
             />
 
-          
             <Pressable
               style={style.botaoEntrar}
               onPress={handleLogin}
@@ -76,7 +82,6 @@ export default function Index() {
               </Text>
             </Pressable>
 
-            
             <View style={style.areaCadastro}>
               <Text style={style.naotemconta}>
                 Ainda não tem uma conta?
