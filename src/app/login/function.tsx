@@ -6,7 +6,7 @@ const API_URL = "http://192.168.1.82:8000";
 
 export async function fazerLogin(email: string, senha: string) {
   try {
-    if (!email || !senha) {
+    if (!email.trim() || !senha) {
       alert("Preencha o e-mail e a senha.");
       return;
     }
@@ -17,7 +17,7 @@ export async function fazerLogin(email: string, senha: string) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email: email,
+        email: email.trim(),
         senha: senha,
       }),
     });
@@ -29,7 +29,21 @@ export async function fazerLogin(email: string, senha: string) {
       return;
     }
 
+    if (!dados.access_token) {
+      alert("A API não retornou o token de acesso.");
+      return;
+    }
+
+    // Salva o token para utilizar nas próximas requisições
     await AsyncStorage.setItem("token", dados.access_token);
+
+    // Salva também os dados básicos do usuário
+    await AsyncStorage.setItem(
+      "usuario",
+      JSON.stringify(dados.usuario)
+    );
+
+    console.log("Login realizado com sucesso!");
 
     router.replace("/contatos");
 

@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native";
 export const style = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#0f0f10",
+    backgroundColor: "#101820",
   },
 
   scrollContent: {
@@ -22,125 +22,167 @@ export const style = StyleSheet.create({
 
   logoContainer: {
     alignItems: "center",
-    marginBottom: 18,
+    marginBottom: 20,
   },
 
   logoCirculo: {
-    width: 86,
-    height: 86,
+    width: 92,
+    height: 92,
     borderRadius: 26,
-    backgroundColor: "#1b1b1d",
-    borderWidth: 1,
-    borderColor: "#3a3a42",
+    backgroundColor: "#1D2A35",
+    borderWidth: 1.5,
+    borderColor: "#718394",
     alignItems: "center",
     justifyContent: "center",
+    elevation: 5,
+    shadowColor: "#D62828",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
   },
 
   logoCruz: {
-    color: "#d62828",
-    fontSize: 58,
+    color: "#FF5C5C",
+    fontSize: 62,
     fontWeight: "bold",
-    lineHeight: 66,
+    lineHeight: 72,
   },
 
   titulo: {
-    color: "#ffffff",
-    fontSize: 34,
+    color: "#FFFFFF",
+    fontSize: 36,
     fontWeight: "bold",
     textAlign: "center",
     letterSpacing: 0.5,
   },
 
   tituloDestaque: {
-    color: "#d62828",
+    color: "#FF5C5C",
   },
 
   subtitulo: {
-    color: "#b8b8b8",
-    fontSize: 15,
+    color: "#D1D9E0",
+    fontSize: 17,
     textAlign: "center",
-    marginTop: 8,
+    marginTop: 10,
     marginBottom: 34,
+    lineHeight: 24,
   },
 
   formulario: {
-    backgroundColor: "#1b1b1d",
+    backgroundColor: "#1D2A35",
     borderRadius: 18,
     borderWidth: 1,
-    borderColor: "#2f2f35",
+    borderColor: "#526474",
     padding: 20,
+    elevation: 4,
+    shadowColor: "#000000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
   },
 
   label: {
-    color: "#ffffff",
-    fontSize: 14,
+    color: "#FFFFFF",
+    fontSize: 17,
     fontWeight: "600",
     marginBottom: 9,
   },
 
   textosInput: {
-    backgroundColor: "#242428",
-    borderWidth: 1,
-    borderColor: "#3a3a42",
-    borderRadius: 11,
-    paddingHorizontal: 14,
-    paddingVertical: 14,
-    color: "#ffffff",
-    fontSize: 15,
-    marginBottom: 20,
+    backgroundColor: "#263746",
+    borderWidth: 1.5,
+    borderColor: "#8296A7",
+    borderRadius: 12,
+    paddingHorizontal: 15,
+    paddingVertical: 16,
+    minHeight: 58,
+    color: "#FFFFFF",
+    fontSize: 17,
+    marginBottom: 22,
   },
 
   botaoEntrar: {
-    backgroundColor: "#d62828",
-    paddingVertical: 15,
-    borderRadius: 11,
+    backgroundColor: "#D62828",
+    minHeight: 60,
+    paddingHorizontal: 18,
+    paddingVertical: 16,
+    borderRadius: 13,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 3,
-    elevation: 3,
+    marginTop: 5,
+    elevation: 4,
+    shadowColor: "#000000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 7,
+  },
+
+  botaoDesabilitado: {
+    opacity: 0.65,
+  },
+
+  conteudoBotao: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 12,
   },
 
   textoBotaoEntrar: {
-    color: "#ffffff",
-    fontSize: 16,
+    color: "#FFFFFF",
+    fontSize: 18,
     fontWeight: "bold",
   },
 
   areaCadastro: {
     borderTopWidth: 1,
-    borderTopColor: "#2f2f35",
-    marginTop: 24,
-    paddingTop: 20,
+    borderTopColor: "#526474",
+    marginTop: 26,
+    paddingTop: 22,
     alignItems: "center",
   },
 
   naotemconta: {
-    color: "#b8b8b8",
-    fontSize: 14,
-    marginBottom: 12,
+    color: "#D1D9E0",
+    fontSize: 16,
+    marginBottom: 14,
+    textAlign: "center",
   },
 
   botaoCadastro: {
     width: "100%",
-    paddingVertical: 13,
-    borderRadius: 11,
-    borderWidth: 1,
-    borderColor: "#d62828",
+    minHeight: 56,
+    paddingHorizontal: 15,
+    paddingVertical: 15,
+    borderRadius: 12,
+    borderWidth: 1.5,
+    borderColor: "#FF5C5C",
     alignItems: "center",
+    justifyContent: "center",
   },
 
   textoBotaoCadastro: {
-    color: "#ffffff",
-    fontSize: 15,
+    color: "#FFFFFF",
+    fontSize: 17,
     fontWeight: "bold",
   },
 
   rodape: {
-    color: "#66666e",
-    fontSize: 10,
+    color: "#B8C7D3",
+    fontSize: 12,
     fontWeight: "600",
     textAlign: "center",
-    letterSpacing: 1.2,
+    letterSpacing: 1,
     marginTop: 28,
   },
 });

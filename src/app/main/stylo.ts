@@ -2,12 +2,9 @@
 import { StyleSheet } from "react-native";
 
 export const estilos = StyleSheet.create({
-
-  // CONTAINER PRINCIPAL
-
   container: {
     flex: 1,
-    backgroundColor: "#0f0f10",
+    backgroundColor: "#101820",
   },
 
   scrollContent: {
@@ -16,136 +13,111 @@ export const estilos = StyleSheet.create({
     paddingBottom: 50,
   },
 
-
-  // TÍTULO DO APLICATIVO
-
   titulo: {
-    fontSize: 32,
+    fontSize: 34,
     fontWeight: "bold",
-    color: "#ffffff",
+    color: "#FFFFFF",
     textAlign: "center",
     marginBottom: 8,
     letterSpacing: 1,
   },
 
   subtitulo: {
-    fontSize: 15,
-    color: "#b8b8b8",
+    fontSize: 17,
+    color: "#D1D9E0",
     textAlign: "center",
     marginBottom: 30,
-    lineHeight: 22,
+    lineHeight: 25,
   },
 
-
-  // SEÇÃO DE EMERGÊNCIA
-
   secaoSOS: {
-    backgroundColor: "#1b1b1d",
+    backgroundColor: "#1D2A35",
     borderRadius: 16,
     padding: 18,
     marginBottom: 30,
-
     borderWidth: 1,
-    borderColor: "#2f2f35",
-
+    borderColor: "#526474",
     gap: 14,
   },
 
   secaoTitulo: {
-    fontSize: 21,
+    fontSize: 22,
     fontWeight: "bold",
-    color: "#ffffff",
+    color: "#FFFFFF",
     marginBottom: 8,
   },
 
-
-  // ESTILO BASE DOS BOTÕES DE EMERGÊNCIA
-
   botao: {
-    backgroundColor: "#d62828",
-
+    backgroundColor: "#D62828",
     minHeight: 60,
     paddingVertical: 16,
     paddingHorizontal: 12,
-
     borderRadius: 12,
-
     alignItems: "center",
     justifyContent: "center",
-
     elevation: 3,
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
   },
 
   textobotao: {
-    color: "#ffffff",
+    color: "#FFFFFF",
     fontSize: 18,
     fontWeight: "bold",
     textAlign: "center",
-    letterSpacing: 0.5,
+    letterSpacing: 0.3,
   },
 
-
-  // CORES INDIVIDUAIS DOS SERVIÇOS
-
   botaoPolicia: {
-    backgroundColor: "#2455a4",
+    backgroundColor: "#2455A4",
   },
 
   botaoSamu: {
-    backgroundColor: "#b91c1c",
+    backgroundColor: "#B91C1C",
   },
 
   botaoBombeiros: {
-    backgroundColor: "#c65a16",
+    backgroundColor: "#C65A16",
   },
-
-
-  // CABEÇALHO DOS CONTATOS
 
   cabecalhoContatos: {
     marginBottom: 18,
   },
 
   botaoEditar: {
-    backgroundColor: "#242428",
-
+    backgroundColor: "#263746",
     borderWidth: 1,
-    borderColor: "#3a3a42",
-
-    minHeight: 50,
-
+    borderColor: "#718394",
+    minHeight: 52,
     paddingVertical: 12,
     paddingHorizontal: 14,
-
     borderRadius: 12,
-
     alignItems: "center",
     justifyContent: "center",
-
     marginTop: 12,
   },
 
   textoBotaoEditar: {
-    color: "#ffffff",
-    fontSize: 16,
+    color: "#FFFFFF",
+    fontSize: 17,
     fontWeight: "bold",
+    textAlign: "center",
   },
 
-
-  // CARDS DOS CONTATOS
-
   cardContato: {
-    backgroundColor: "#1b1b1d",
-
+    backgroundColor: "#1D2A35",
     borderRadius: 16,
     padding: 18,
-
     marginBottom: 16,
-
     borderWidth: 1,
-    borderColor: "#2f2f35",
-
-    elevation: 2,
+    borderColor: "#526474",
+    elevation: 3,
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
   },
 
   contatoInfo: {
@@ -153,26 +125,23 @@ export const estilos = StyleSheet.create({
   },
 
   contatoNome: {
-    color: "#ffffff",
-    fontSize: 19,
+    color: "#FFFFFF",
+    fontSize: 20,
     fontWeight: "bold",
     marginBottom: 6,
   },
 
   contatoNumero: {
-    color: "#b8b8b8",
-    fontSize: 16,
+    color: "#D1D9E0",
+    fontSize: 17,
   },
 
   textoStatusMensagem: {
-    color: "#b8b8b8",
-    fontSize: 14,
+    color: "#D1D9E0",
+    fontSize: 15,
     marginTop: 10,
-    lineHeight: 20,
+    lineHeight: 22,
   },
-
-
-  // AÇÕES DOS CONTATOS
 
   contatoAcoes: {
     flexDirection: "row",
@@ -181,125 +150,88 @@ export const estilos = StyleSheet.create({
 
   botaoAcaoSecundaria: {
     flex: 1,
-
-    backgroundColor: "#303036",
-
+    backgroundColor: "#263746",
     borderWidth: 1,
-    borderColor: "#45454d",
-
-    minHeight: 52,
-
+    borderColor: "#718394",
+    minHeight: 54,
     paddingVertical: 12,
     paddingHorizontal: 8,
-
     borderRadius: 12,
-
     alignItems: "center",
     justifyContent: "center",
   },
 
   textoAcaoSecundaria: {
-    color: "#ffffff",
-    fontSize: 14,
+    color: "#FFFFFF",
+    fontSize: 15,
     fontWeight: "bold",
     textAlign: "center",
   },
 
   botaoAcaoPrimaria: {
     flex: 1,
-
-    backgroundColor: "#d62828",
-
-    minHeight: 52,
-
+    backgroundColor: "#D62828",
+    minHeight: 54,
     paddingVertical: 12,
     paddingHorizontal: 8,
-
     borderRadius: 12,
-
     alignItems: "center",
     justifyContent: "center",
   },
 
   textoAcaoPrimaria: {
-    color: "#ffffff",
-    fontSize: 15,
+    color: "#FFFFFF",
+    fontSize: 16,
     fontWeight: "bold",
+    textAlign: "center",
   },
-
-
-  // FUNDO DO MODAL
 
   fundoModal: {
     flex: 1,
-
     justifyContent: "center",
-
     padding: 20,
-
-    backgroundColor: "rgba(0,0,0,0.80)",
+    backgroundColor: "rgba(0,0,0,0.85)",
   },
 
-
-  // CAIXA DO MODAL
-
   caixaModal: {
-    backgroundColor: "#1b1b1d",
-
+    backgroundColor: "#1D2A35",
     padding: 22,
-
     borderRadius: 18,
-
     borderWidth: 1,
-    borderColor: "#3a3a42",
-
+    borderColor: "#718394",
     gap: 16,
   },
 
   tituloModal: {
-    fontSize: 24,
+    fontSize: 25,
     fontWeight: "bold",
-    color: "#ffffff",
+    color: "#FFFFFF",
   },
 
   destinatarioModal: {
-    color: "#b8b8b8",
-    fontSize: 16,
+    color: "#D1D9E0",
+    fontSize: 17,
+    lineHeight: 24,
   },
-
-
-  // CAMPO DE MENSAGEM
 
   campoMensagem: {
     minHeight: 140,
-
-    backgroundColor: "#242428",
-
+    backgroundColor: "#263746",
     borderWidth: 1,
-    borderColor: "#45454d",
-
+    borderColor: "#8296A7",
     borderRadius: 12,
-
     padding: 14,
-
-    color: "#ffffff",
-
-    fontSize: 16,
-    lineHeight: 23,
+    color: "#FFFFFF",
+    fontSize: 17,
+    lineHeight: 25,
   },
 
-
-  // BOTÃO SALVAR MENSAGEM
-
   botaoSalvarMensagem: {
-    backgroundColor: "#d62828",
-
-    minHeight: 54,
-
+    backgroundColor: "#D62828",
+    minHeight: 56,
     paddingVertical: 14,
-
+    paddingHorizontal: 12,
     borderRadius: 12,
-
     alignItems: "center",
     justifyContent: "center",
   },
@@ -308,28 +240,30 @@ export const estilos = StyleSheet.create({
     opacity: 0.6,
   },
 
-  textoBotaoSalvar: {
-    color: "#ffffff",
-    fontWeight: "bold",
-    fontSize: 16,
+  conteudoBotao: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 10,
   },
 
-
-  // BOTÃO CANCELAR
+  textoBotaoSalvar: {
+    color: "#FFFFFF",
+    fontWeight: "bold",
+    fontSize: 17,
+    textAlign: "center",
+  },
 
   botaoCancelar: {
-    minHeight: 48,
-
+    minHeight: 50,
     padding: 12,
-
     alignItems: "center",
     justifyContent: "center",
   },
 
   textoCancelar: {
-    color: "#b8b8b8",
-    fontSize: 16,
-    fontWeight: "500",
+    color: "#D1D9E0",
+    fontSize: 17,
+    fontWeight: "600",
   },
-
 });

@@ -1,4 +1,4 @@
-import { View, Text, TextInput, ScrollView, Pressable, Alert } from "react-native";
+
 import React, {
   createContext,
   useContext,
@@ -10,7 +10,7 @@ import React, {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export interface Contato {
-  id: string;
+  id?: string;
   nome: string;
   numero: string;
 }
@@ -19,15 +19,11 @@ interface ContatosContextType {
   contatos: Contato[];
   carregandoContatos: boolean;
   salvarContatos: (novosContatos: Contato[]) => Promise<void>;
+  atualizarContatos: () => Promise<void>;
 }
 
+const API_URL = "http://192.168.1.82:8000";
 const CHAVE_CONTATOS = "@alerta_plus/contatos";
-
-const contatosPadrao: Contato[] = [
-  { id: "1", nome: "Contato 1", numero: "(11) 99999-0001" },
-  { id: "2", nome: "Contato 2", numero: "(11) 99999-0002" },
-  { id: "3", nome: "Contato 3", numero: "(11) 99999-0003" },
-];
 
 const ContatosContext =
   createContext<ContatosContextType | undefined>(undefined);
@@ -37,36 +33,65 @@ export function ContatosProvider({
 }: {
   children: ReactNode;
 }) {
-  const [contatos, setContatos] =
-    useState<Contato[]>(contatosPadrao);
+  const [contatos, setContatos] = useState<Contato[]>([]);
+  const [carregandoContatos, setCarregandoContatos] = useState(true);
 
-  const [carregandoContatos, setCarregandoContatos] =
-    useState(true);
+  // Busca os contatos diretamente na API
+  async function buscarContatos(): Promise<Contato[]> {
+    const token = await AsyncStorage.getItem("token");
 
+    if (!token) {
+      throw new Error("Token de autenticação não encontrado.");
+    }
+
+    const resposta = await fetch(`${API_URL}/contatos/`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!resposta.ok) {
+      const erro = await resposta.text();
+      console.error("Erro ao buscar contatos:", erro);
+
+      throw new Error("Não foi possível buscar os contatos na API.");
+    }
+
+    const dados = await resposta.json();
+
+    return dados.map((item: any) => ({
+      id: String(item.id),
+      nome: item.nome,
+      numero: item.telefone,
+    }));
+  }
+
+  // Atualiza os contatos na tela e no armazenamento local
+  async function atualizarContatos() {
+    const lista = await buscarContatos();
+
+    setContatos(lista);
+
+    await AsyncStorage.setItem(
+      CHAVE_CONTATOS,
+      JSON.stringify(lista)
+    );
+  }
+
+  // Carrega os contatos quando o contexto inicia
   useEffect(() => {
     async function carregarContatos() {
       try {
-        const dados = await AsyncStorage.getItem(CHAVE_CONTATOS);
-
-        if (dados !== null) {
-          const contatosSalvos: unknown = JSON.parse(dados);
-
-          if (
-            Array.isArray(contatosSalvos) &&
-            contatosSalvos.length === 3 &&
-            contatosSalvos.every(
-              (item) =>
-                item &&
-                typeof item.id === "string" &&
-                typeof item.nome === "string" &&
-                typeof item.numero === "string"
-            )
-          ) {
-            setContatos(contatosSalvos as Contato[]);
-          }
-        }
+        await atualizarContatos();
       } catch (erro) {
-        console.error("Erro ao carregar contatos:", erro);
+        console.error("Erro ao carregar contatos da API:", erro);
+
+        // Não reutiliza IDs locais como se fossem IDs do banco
+        setContatos([]);
+
+        await AsyncStorage.removeItem(CHAVE_CONTATOS);
       } finally {
         setCarregandoContatos(false);
       }
@@ -75,16 +100,59 @@ export function ContatosProvider({
     carregarContatos();
   }, []);
 
-  const salvarContatos = async (novosContatos: Contato[]) => {
-    // Primeiro grava no armazenamento. Só atualiza o estado
-    // se a gravação der certo.
-    await AsyncStorage.setItem(
-      CHAVE_CONTATOS,
-      JSON.stringify(novosContatos)
-    );
+  // Cadastra ou atualiza os contatos
+  async function salvarContatos(novosContatos: Contato[]) {
+    const token = await AsyncStorage.getItem("token");
 
-    setContatos(novosContatos);
-  };
+    if (!token) {
+      throw new Error("Token de autenticação não encontrado.");
+    }
+
+    for (const contato of novosContatos) {
+      const nome = contato.nome.trim();
+      const telefone = contato.numero.trim();
+
+      if (!nome || !telefone) {
+        throw new Error(
+          "Preencha o nome e o telefone dos três contatos."
+        );
+      }
+
+      const existeNoBanco = Boolean(contato.id);
+
+      const url = existeNoBanco
+        ? `${API_URL}/contatos/${contato.id}`
+        : `${API_URL}/contatos/`;
+
+      const resposta = await fetch(url, {
+        method: existeNoBanco ? "PUT" : "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nome,
+          telefone,
+        }),
+      });
+
+      if (!resposta.ok) {
+        const erro = await resposta.text();
+
+        console.error(
+          `Erro ao ${existeNoBanco ? "atualizar" : "cadastrar"} contato:`,
+          erro
+        );
+
+        throw new Error(
+          `Não foi possível ${existeNoBanco ? "atualizar" : "cadastrar"} o contato ${nome}.`
+        );
+      }
+    }
+
+    // Busca os IDs reais gerados pelo Supabase
+    await atualizarContatos();
+  }
 
   return (
     <ContatosContext.Provider
@@ -92,6 +160,7 @@ export function ContatosProvider({
         contatos,
         carregandoContatos,
         salvarContatos,
+        atualizarContatos,
       }}
     >
       {children}
