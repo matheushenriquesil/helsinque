@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef } from "react";
 
 import {
@@ -19,7 +18,11 @@ import { useScript } from "./script";
 import { useContatos } from "../../context/ContatosContext";
 
 export default function Main() {
-  const { contatos } = useContatos();
+  const {
+    contatos,
+    atualizarContatos,
+    carregandoContatos,
+  } = useContatos();
 
   const {
     mensagens,
@@ -46,6 +49,20 @@ export default function Main() {
   const botoesContatos = useRef(
     Array.from({ length: 20 }, () => new Animated.Value(1))
   ).current;
+
+  // ATUALIZAR CONTATOS AO ABRIR A TELA PRINCIPAL
+  useEffect(() => {
+    async function carregarContatos() {
+      try {
+        await atualizarContatos();
+        console.log("Contatos carregados com sucesso!");
+      } catch (erro) {
+        console.error("Erro ao carregar contatos:", erro);
+      }
+    }
+
+    carregarContatos();
+  }, []);
 
   useEffect(() => {
     Animated.timing(entrada, {
@@ -176,82 +193,96 @@ export default function Main() {
           </View>
 
           {/* LISTA DE CONTATOS */}
-          {contatos.map((contato, index) => {
-            const animacao =
-              botoesContatos[index] ?? botoesContatos[0];
+          {carregandoContatos && contatos.length === 0 ? (
+            <View style={{ padding: 20, alignItems: "center" }}>
+              <ActivityIndicator color="#d62828" size="large" />
+              <Text style={{ marginTop: 10 }}>
+                Carregando contatos...
+              </Text>
+            </View>
+          ) : contatos.length === 0 ? (
+            <Text style={{ textAlign: "center", padding: 20 }}>
+              Nenhum contato de emergência cadastrado.
+            </Text>
+          ) : (
+            contatos.map((contato, index) => {
+              const animacao =
+                botoesContatos[index] ?? botoesContatos[0];
 
-            const temMensagem =
-              Boolean(contato.id && mensagens[contato.id]);
+              const temMensagem = Boolean(
+                contato.id && mensagens[contato.id]
+              );
 
-            return (
-              <Animated.View
-                key={contato.id ?? `contato-${index}`}
-                style={{
-                  transform: [{ scale: animacao }],
-                }}
-              >
-                <View style={estilos.cardContato}>
-                  {/* INFORMAÇÕES DO CONTATO */}
-                  <View style={estilos.contatoInfo}>
-                    <Text
-                      style={estilos.contatoNome}
-                      accessibilityRole="header"
-                    >
-                      {contato.nome}
-                    </Text>
-
-                    <Text style={estilos.contatoNumero}>
-                      {contato.numero}
-                    </Text>
-
-                    <Text
-                      style={estilos.textoStatusMensagem}
-                      accessibilityLabel={
-                        temMensagem
-                          ? `Mensagem personalizada salva para ${contato.nome}`
-                          : `Nenhuma mensagem personalizada salva para ${contato.nome}`
-                      }
-                    >
-                      {temMensagem
-                        ? "✓ Mensagem personalizada salva"
-                        : "Nenhuma mensagem personalizada"}
-                    </Text>
-                  </View>
-
-                  {/* BOTÕES DO CONTATO */}
-                  <View style={estilos.contatoAcoes}>
-                    <Pressable
-                      style={estilos.botaoAcaoSecundaria}
-                      onPress={() => handleProgramar(contato)}
-                      onPressIn={() => animarBotao(animacao, true)}
-                      onPressOut={() => animarBotao(animacao, false)}
-                      accessibilityRole="button"
-                      accessibilityLabel={`Programar mensagem para ${contato.nome}`}
-                      accessibilityHint="Abre a edição da mensagem personalizada para este contato"
-                    >
-                      <Text style={estilos.textoAcaoSecundaria}>
-                        Programar mensagem
+              return (
+                <Animated.View
+                  key={contato.id ?? `contato-${index}`}
+                  style={{
+                    transform: [{ scale: animacao }],
+                  }}
+                >
+                  <View style={estilos.cardContato}>
+                    {/* INFORMAÇÕES DO CONTATO */}
+                    <View style={estilos.contatoInfo}>
+                      <Text
+                        style={estilos.contatoNome}
+                        accessibilityRole="header"
+                      >
+                        {contato.nome}
                       </Text>
-                    </Pressable>
 
-                    <Pressable
-                      style={estilos.botaoAcaoPrimaria}
-                      onPress={() => handleEnviar(contato)}
-                      onPressIn={() => animarBotao(animacao, true)}
-                      onPressOut={() => animarBotao(animacao, false)}
-                      accessibilityRole="button"
-                      accessibilityLabel={`Enviar mensagem para ${contato.nome}`}
-                      accessibilityHint="Envia a mensagem configurada para este contato"
-                    >
-                      <Text style={estilos.textoAcaoPrimaria}>
-                        Enviar
+                      <Text style={estilos.contatoNumero}>
+                        {contato.numero}
                       </Text>
-                    </Pressable>
+
+                      <Text
+                        style={estilos.textoStatusMensagem}
+                        accessibilityLabel={
+                          temMensagem
+                            ? `Mensagem personalizada salva para ${contato.nome}`
+                            : `Nenhuma mensagem personalizada salva para ${contato.nome}`
+                        }
+                      >
+                        {temMensagem
+                          ? "✓ Mensagem personalizada salva"
+                          : "Nenhuma mensagem personalizada"}
+                      </Text>
+                    </View>
+
+                    {/* BOTÕES DO CONTATO */}
+                    <View style={estilos.contatoAcoes}>
+                      <Pressable
+                        style={estilos.botaoAcaoSecundaria}
+                        onPress={() => handleProgramar(contato)}
+                        onPressIn={() => animarBotao(animacao, true)}
+                        onPressOut={() => animarBotao(animacao, false)}
+                        accessibilityRole="button"
+                        accessibilityLabel={`Programar mensagem para ${contato.nome}`}
+                        accessibilityHint="Abre a edição da mensagem personalizada para este contato"
+                      >
+                        <Text style={estilos.textoAcaoSecundaria}>
+                          Programar mensagem
+                        </Text>
+                      </Pressable>
+
+                      <Pressable
+                        style={estilos.botaoAcaoPrimaria}
+                        onPress={() => handleEnviar(contato)}
+                        onPressIn={() => animarBotao(animacao, true)}
+                        onPressOut={() => animarBotao(animacao, false)}
+                        accessibilityRole="button"
+                        accessibilityLabel={`Enviar mensagem para ${contato.nome}`}
+                        accessibilityHint="Envia a mensagem configurada para este contato"
+                      >
+                        <Text style={estilos.textoAcaoPrimaria}>
+                          Enviar
+                        </Text>
+                      </Pressable>
+                    </View>
                   </View>
-                </View>
-              </Animated.View>
-            );
-          })}
+                </Animated.View>
+              );
+            })
+          )}
         </ScrollView>
       </Animated.View>
 

@@ -1,8 +1,7 @@
-
 import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const API_URL = "http://192.168.1.82:8000";
+const API_URL = "http://172.30.1.222:8000";
 
 export async function fazerLogin(email: string, senha: string) {
   try {

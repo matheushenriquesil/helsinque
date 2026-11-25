@@ -1,4 +1,3 @@
-
 import React, {
   createContext,
   useContext,
@@ -22,7 +21,7 @@ interface ContatosContextType {
   atualizarContatos: () => Promise<void>;
 }
 
-const API_URL = "http://192.168.1.82:8000";
+const API_URL = "http://172.30.1.222:8000";
 const CHAVE_CONTATOS = "@alerta_plus/contatos";
 
 const ContatosContext =
@@ -80,18 +79,23 @@ export function ContatosProvider({
     );
   }
 
-  // Carrega os contatos quando o contexto inicia
+  // Carrega os contatos somente se houver um token salvo
   useEffect(() => {
     async function carregarContatos() {
       try {
+        const token = await AsyncStorage.getItem("token");
+
+        if (!token) {
+          setContatos([]);
+          return;
+        }
+
         await atualizarContatos();
+
       } catch (erro) {
         console.error("Erro ao carregar contatos da API:", erro);
 
-        // Não reutiliza IDs locais como se fossem IDs do banco
         setContatos([]);
-
-        await AsyncStorage.removeItem(CHAVE_CONTATOS);
       } finally {
         setCarregandoContatos(false);
       }
